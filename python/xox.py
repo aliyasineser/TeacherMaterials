@@ -1,13 +1,8 @@
-import sys
-import os
-
 # Prints the board to the terminal
 def printBoard(board):
     # print the 2D Array
-    for row in range(0,board.__len__()):
-        for column in range(0,board.__len__()):
-            print(board[row][column], end=' ')
-        print("")
+    for row in range(0, board.__len__()):
+        print(*board[row], end='\n')
     return
 
 # Plays the move for the player.
@@ -23,25 +18,25 @@ def playTurn(board, playerSymbol, row, column):
 
 # Checks the board. If there is at least one empty tile, returns true.
 def isStillEmpty(board ):
-    for row in range(0,board.__len__()):
-        for column in range(0,board.__len__()):
-           if(board[row][column] == '.'):
-               return True 
+    for row in board:
+        if '.' in row:
+            return True
 
 # Checks if the game is over or not
 def isOver(board, symbol):
     isThereEmpty = isStillEmpty(board)
     if(isThereEmpty): # Take a deep breathe and search for all possibilities
-        if((board[0][0] == symbol and board[0][1] == symbol and board[0][2] == symbol) or
-            (board[1][0] == symbol and board[1][1] == symbol and board[1][2] == symbol) or
-            (board[2][0] == symbol and board[2][1] == symbol and board[2][2] == symbol) or 
-
-            (board[0][0] == symbol and board[1][0] == symbol and board[2][0] == symbol) or 
-            (board[0][1] == symbol and board[1][1] == symbol and board[2][1] == symbol) or 
-            (board[0][2] == symbol and board[1][2] == symbol and board[2][2] == symbol) or 
-
-            (board[0][0] == symbol and board[1][1] == symbol and board[2][2] == symbol) or 
-            (board[0][2] == symbol and board[1][1] == symbol and board[2][0] == symbol)):
+        if (
+            # check all rows
+            ([symbol, symbol, symbol] in board[:]) or
+            # zip() function will transpose the board
+            # check all cols
+            ((symbol, symbol, symbol) in zip(*board)) or
+            # check principal diagonal first
+            (board[0][0] == symbol and board[1][1] == symbol and board[2][2] == symbol) or
+            # then check secondary diagonal
+            (board[0][2] == symbol and board[1][1] == symbol and board[2][0] == symbol)
+        ):
             return True            
 
     return False 
